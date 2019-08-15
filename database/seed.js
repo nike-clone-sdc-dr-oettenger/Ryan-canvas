@@ -1,3 +1,4 @@
+//Review this file;
 const db = require('./index.js');
 const {Shoes, Images, JoinTable} = require('./schemas.js');
 const request = require('request');
