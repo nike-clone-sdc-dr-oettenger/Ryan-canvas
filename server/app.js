@@ -15,6 +15,14 @@ app.get('/api/images', (req, res) => {
   })
 })
 
+app.get('/api/recommendedImage', (req, res) => {
+  let shoe = req.body.shoe_id;
+
+  Shoe_Images.findOne({shoe_id: shoe}).then((shoeImage) => {
+    res.json(shoeImage.img1);
+  })
+})
+
 app.listen(port, () => {
   console.log(`App is running on http://localhost:${port}/`);
 })
