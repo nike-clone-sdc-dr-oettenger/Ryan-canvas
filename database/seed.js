@@ -3,45 +3,42 @@ const db = require('./index.js');
 const {Shoe_Images} = require('./schemas.js');
 const request = require('request');
 
-const unsplashAPI = '1ba2afa1a3bdfcd4fd4e054690efddd90037f047ce88f2d9cb56d2b17f4d0351'
+const unsplash = require('./unsplash.config.js')
 
-// let options = {
-//   query: 'nike shoe',
-//   url: `https://api.unsplash.com/search/photos/?client_id=${unsplashAPI}`
-// }
+const saveToDB = (shoeImagesArr, index) => {
+  //recursive function to continuously save unless
+    //base case: if index === shoeImages.length;
+}
 
-// const populateShoes = () => {
-//   for (let i = 0; i < 100; i++) {
-//     let shoe = new Shoe_Images({shoe_id: i});
-//     Shoe_Images.save();
-//   }
-// }
-
-// populateShoes();
-
-request.get(`https://api.unsplash.com/search/photos/?query=nike+shoe&client_id=${unsplashAPI}`, (err, res) => {
+request.get(`https://api.unsplash.com/search/photos/?query=nike+shoe&client_id=${unsplash.API}`, (err, res) => {
   if (err) {alert(err)};
-  let imagesArr = [];
+  let images = {};
   let shoeCount = 0;
   let body = JSON.parse(res.body)
-  console.log(typeof body)
-  body.results.some((img,i) => {
-    let ind = i % 6;
-    if (!ind && i > 0) {
-      let images = new Shoe_Images({
-        shoe_id: shoeCount,
-        img1: imagesArr[0],
-        img2: imagesArr[1],
-        img3: imagesArr[2],
-        img4: imagesArr[3],
-        img5: imagesArr[4],
-        img6: imagesArr[5],
-      });
-      shoeCount++;
-      images.save();
+  let imgsToSave = [];
+  // body.results.some((img,i) => {
+  //   let ind = i % 6;
+  //   if (!ind && i > 0) {
+  //     images.shoe_id = shoeCount;
+  //     images.img1 = imagesArr[ind];
+  //     images.img2 = imagesArr[ind+1];
+  //     images.img3 = imagesArr[ind+2];
+  //     images.img4 = imagesArr[ind+3];
+  //     images.img5 = imagesArr[ind+4];
+  //     images.img6 = imagesArr[ind+5];
+  //     shoeCount++;
+  //     imgsToSave.push(images);
+  //   } else {
+  //     imagesArr.push(img.urls.raw);
+  //   }
+  //   if (shoeCount > 100) {return true};
+  // })
+  let imagesArr = body.results.map((img, i) => {
+    if (i < 700) {
+      return img.urls.raw;
     } else {
-      imagesArr[ind] = img.urls.raw;
+      break;
     }
-    if (shoeCount > 100) {return true};
   })
+  console.log(imagesArr);
 })
