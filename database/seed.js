@@ -3,13 +3,9 @@ const db = require('./index.js');
 const {Shoe_Images} = require('./schemas.js');
 const request = require('request');
 
-const unsplash = require('./unsplash.config.js')
+const unsplash = require('./unsplash.config.js');
 
-const saveToDB = (shoeImagesArr, index) => {
-  //recursive function to continuously save unless
-    //base case: if index === shoeImages.length;
-}
-
+//TODO: refactor to be function that can dynamically import random number of images instead (current state: reusing code and is inefficient)
 request.get(`https://api.unsplash.com/search/photos/?query=nike&per_page=500&client_id=${unsplash.API}`, (err, res) => {
   if (err) {alert(err)};
   let body = JSON.parse(res.body)
