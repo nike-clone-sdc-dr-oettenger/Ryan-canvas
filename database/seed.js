@@ -10,35 +10,35 @@ const saveToDB = (shoeImagesArr, index) => {
     //base case: if index === shoeImages.length;
 }
 
-request.get(`https://api.unsplash.com/search/photos/?query=nike+shoe&client_id=${unsplash.API}`, (err, res) => {
+request.get(`https://api.unsplash.com/search/photos/?query=nike&per_page=500&client_id=${unsplash.API}`, (err, res) => {
   if (err) {alert(err)};
-  let images = {};
-  let shoeCount = 0;
   let body = JSON.parse(res.body)
   let imgsToSave = [];
-  // body.results.some((img,i) => {
-  //   let ind = i % 6;
-  //   if (!ind && i > 0) {
-  //     images.shoe_id = shoeCount;
-  //     images.img1 = imagesArr[ind];
-  //     images.img2 = imagesArr[ind+1];
-  //     images.img3 = imagesArr[ind+2];
-  //     images.img4 = imagesArr[ind+3];
-  //     images.img5 = imagesArr[ind+4];
-  //     images.img6 = imagesArr[ind+5];
-  //     shoeCount++;
-  //     imgsToSave.push(images);
-  //   } else {
-  //     imagesArr.push(img.urls.raw);
-  //   }
-  //   if (shoeCount > 100) {return true};
-  // })
-  let imagesArr = body.results.map((img, i) => {
-    if (i < 700) {
-      return img.urls.raw;
-    } else {
-      break;
+  for (let shoeCount = 0; shoeCount < 50; shoeCount++) {
+    let images = {};
+    images.shoe_id = shoeCount;
+    images.img1 = body.results[(5 * shoeCount)].urls.raw;
+    images.img2 = body.results[(5 * shoeCount) + 1].urls.raw;
+    images.img3 = body.results[(5 * shoeCount) + 2].urls.raw;
+    images.img4 = body.results[(5 * shoeCount) + 3].urls.raw;
+    images.img5 = body.results[(5 * shoeCount) + 4].urls.raw;
+    imgsToSave.push(images);
+  }
+  Shoe_Images.insertMany(imgsToSave).then(request.get(`https://api.unsplash.com/search/photos/?query=nike+shoe&per_page=500&client_id=${unsplash.API}`, (err, res) => {
+    if (err) {alert(err)};
+    let body = JSON.parse(res.body)
+    let imgsToSave = [];
+    for (let shoeCount = 0; shoeCount < 50; shoeCount++) {
+      let images = {};
+      images.shoe_id = shoeCount + 50;
+      images.img1 = body.results[(5 * shoeCount)].urls.raw;
+      images.img2 = body.results[(5 * shoeCount) + 1].urls.raw;
+      images.img3 = body.results[(5 * shoeCount) + 2].urls.raw;
+      images.img4 = body.results[(5 * shoeCount) + 3].urls.raw;
+      images.img5 = body.results[(5 * shoeCount) + 4].urls.raw;
+      imgsToSave.push(images);
     }
-  })
-  console.log(imagesArr);
+
+    Shoe_Images.insertMany(imgsToSave);
+  }))
 })
