@@ -5,6 +5,10 @@ const request = require('request');
 
 const unsplash = require('./unsplash.config.js');
 
+Shoe_Images.remove({}, function(err) {
+  console.log('collection removed')
+});
+
 //TODO: refactor to be function that can dynamically import random number of images instead (current state: reusing code and is inefficient)
 request.get(`https://api.unsplash.com/search/photos/?query=nike&per_page=500&client_id=${unsplash.API}`, (err, res) => {
   if (err) {alert(err)};

@@ -16,7 +16,6 @@ const shoeImagesSchema = new mongoose.Schema({
   vid2: String
 })
 
-
 const Shoe_Images = mongoose.model('Shoe_Images', shoeImagesSchema);
 
 module.exports.Shoe_Images = Shoe_Images;
