@@ -22,23 +22,24 @@ app.get('/api/recommendedImage', (req, res) => {
   let shoes = req.query.shoesArr;
   let error;
   let imgArr = [];
-  shoes.forEach(shoe => {
-    Shoe_Images.findOne({shoe_id: shoe}).then((shoeImage) => {
+  shoes.forEach((shoe, i) => {
+    let id = parseInt(shoe);
+    Shoe_Images.findOne({shoe_id: id}).then((shoeImage) => {
       if (!shoeImage) {
-
         error = 'At least one of the shoes does not exist!';
       } else {
         imgArr.push(shoeImage.img1)
       }
+      if (i === shoes.length-1) {
+        if (!error){
+          res.json(imgArr);
+        } else {
+          res.send(error);
+        }
+      }
     })
   });
-  console.log('this is the image arr', imgArr)
-  console.log('this is the error', error)
-  if (!error){
-    res.json(imgArr);
-  } else {
-    res.send(error);
-  }
+
 })
 
 app.listen(port, () => {
