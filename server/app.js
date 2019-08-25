@@ -1,10 +1,12 @@
 const express = require('express');
-const {Shoe_Images} = require('../database/schemas.js')
+const {Shoe_Images} = require('../database/schemas.js');
 const app = express();
 const port = 1121;
 
-app.use(express.urlencoded())
+app.use(express.urlencoded());
 app.use(express.json());
+
+app.use(express.static(__dirname + '/../client/dist'))
 
 app.get('/api/images', (req, res) => {
   let shoe = req.query.shoe_id;
@@ -43,5 +45,5 @@ app.get('/api/recommendedImage', (req, res) => {
 })
 
 app.listen(port, () => {
-  console.log(`App is running on http://localhost:${port}/`);
+  console.log(`Image server is running on http://localhost:${port}/`);
 })
