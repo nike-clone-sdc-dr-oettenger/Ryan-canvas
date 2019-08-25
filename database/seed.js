@@ -1,39 +1,44 @@
+//Review this file;
 const db = require('./index.js');
-const {Shoes, Images, JoinTable} = require('./schemas.js');
+const {Shoe_Images} = require('./schemas.js');
 const request = require('request');
 
-const unsplashAPI = '1ba2afa1a3bdfcd4fd4e054690efddd90037f047ce88f2d9cb56d2b17f4d0351'
+const unsplash = require('./unsplash.config.js');
 
-let options = {
-  url: `https://api.unsplash.com/search/photos/?client_id=${unsplashAPI}`,
-  query: 'nike shoe'
-}
+Shoe_Images.remove({}, function(err) {
+  console.log('collection removed')
+});
 
-const populateShoes = () => {
-  for (let i = 0; i < 100; i++) {
-    let shoe = new Shoes({shoe_id: i});
-    shoe.save();
+//TODO: refactor to be function that can dynamically import random number of images instead (current state: reusing code and is inefficient)
+request.get(`https://api.unsplash.com/search/photos/?query=nike&per_page=500&client_id=${unsplash.API}`, (err, res) => {
+  if (err) {alert(err)};
+  let body = JSON.parse(res.body)
+  let imgsToSave = [];
+  for (let shoeCount = 0; shoeCount < 50; shoeCount++) {
+    let images = {};
+    images.shoe_id = shoeCount;
+    images.img1 = body.results[(5 * shoeCount)].urls.raw;
+    images.img2 = body.results[(5 * shoeCount) + 1].urls.raw;
+    images.img3 = body.results[(5 * shoeCount) + 2].urls.raw;
+    images.img4 = body.results[(5 * shoeCount) + 3].urls.raw;
+    images.img5 = body.results[(5 * shoeCount) + 4].urls.raw;
+    imgsToSave.push(images);
   }
-}
-
-populateShoes();
-
-request.get(options, (err, res) => {
-  let imagesArr = [];
-  res.results.forEach((img,i) => {
-    let ind = i % 6;
-    if (!ind && i > 0) {
-      let images = new Images({
-        img1: imagesArr[0],
-        img2: imagesArr[1],
-        img3: imagesArr[2],
-        img4: imagesArr[3],
-        img5: imagesArr[4],
-        img6: imagesArr[5],
-      })
-      images.save();
-    } else {
-      imagesArr[ind] = img.urls.raw;
+  Shoe_Images.insertMany(imgsToSave).then(request.get(`https://api.unsplash.com/search/photos/?query=nike+shoe&per_page=500&client_id=${unsplash.API}`, (err, res) => {
+    if (err) {alert(err)};
+    let body = JSON.parse(res.body)
+    let imgsToSave = [];
+    for (let shoeCount = 0; shoeCount < 50; shoeCount++) {
+      let images = {};
+      images.shoe_id = shoeCount + 50;
+      images.img1 = body.results[(5 * shoeCount)].urls.raw;
+      images.img2 = body.results[(5 * shoeCount) + 1].urls.raw;
+      images.img3 = body.results[(5 * shoeCount) + 2].urls.raw;
+      images.img4 = body.results[(5 * shoeCount) + 3].urls.raw;
+      images.img5 = body.results[(5 * shoeCount) + 4].urls.raw;
+      imgsToSave.push(images);
     }
-  })
+
+    Shoe_Images.insertMany(imgsToSave);
+  }))
 })
