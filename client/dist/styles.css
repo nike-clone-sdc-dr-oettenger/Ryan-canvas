@@ -1,8 +1,11 @@
 table {
   padding-left: 30px;
   padding-right: 30px;
+  width: 50%;
+
 }
 
 img {
-  width: 450px
+  max-width: 100%;
+  height: auto;
 }
