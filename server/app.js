@@ -10,7 +10,7 @@ app.use(express.static(__dirname + '/../client/dist'))
 
 app.get('/api/images', (req, res) => {
   let shoe = req.query.shoe_id;
-
+  res.setHeader('access-control-allow-origin', '*');
   Shoe_Images.findOne({shoe_id: shoe}).then((shoeImage) => {
     if (!shoeImage) {
       res.send('This shoe does not exist!');
@@ -24,6 +24,7 @@ app.get('/api/recommendedImage', (req, res) => {
   let shoes = req.query.shoesArr;
   let error;
   let imgArr = [];
+  res.setHeader('access-control-allow-origin', '*');
   shoes.forEach((shoe, i) => {
     let id = parseInt(shoe);
     Shoe_Images.findOne({shoe_id: id}).then((shoeImage) => {

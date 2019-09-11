@@ -1,0 +1,15 @@
+version: "3.7"
+services:
+  app:
+    container_name: nike_canvas
+    build: .
+    ports:
+      - "1121:1121"
+    links:
+      - db
+
+  db:
+    container_name: db
+    image: mongo
+    ports:
+      - "27017:27017"

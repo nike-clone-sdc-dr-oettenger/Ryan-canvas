@@ -14,7 +14,6 @@ const Table = (props) => (
             return <tr>{leftImg}</tr>
           }
         } else {
-          console.log('else', i%2)
           return <tr>{leftImg}<td className='img'><img src={imgSrc}></img></td></tr>
         }
       })}
