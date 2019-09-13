@@ -12,7 +12,7 @@ class Canvas extends React.Component {
   }
 
   componentDidMount () {
-    $.get('http://localhost:1121/api/images', {shoe_id: 0}, (data) => {
+    $.get('http://0.0.0.0:1121/api/images', {shoe_id: 0}, (data) => {
       this.setState({
         images: data
       })
