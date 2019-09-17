@@ -1,4 +1,4 @@
-table {
+.canvasTable {
   padding-left: 30px;
   padding-right: 30px;
   max-width: 100%;
@@ -7,4 +7,18 @@ table {
 img {
   max-width: 100%;
   height: auto;
+}
+
+.fullSize {
+  max-width: 100%
+}
+
+button {
+  border: none;
+  background-color: transparent;
+  outline: none;
+  float: right;
+  font-size: 20px;
+  cursor: pointer;
+  margin: 1%
 }

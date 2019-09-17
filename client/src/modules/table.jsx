@@ -5,16 +5,16 @@ let leftImg
 
 const Table = (props) => (
   <div>
-    <table>
+    <table className='canvasTable'>
       <tr>
       {props.images.map((imgSrc, i) => {
         if (!(i%2)) {
-          leftImg = <td className='img'><img src={imgSrc}></img></td>
+          leftImg = <td className='img' onClick={props.onClick}><img src={imgSrc}></img></td>
           if (i === props.images.length-1) {
             return <tr>{leftImg}</tr>
           }
         } else {
-          return <tr>{leftImg}<td className='img'><img src={imgSrc}></img></td></tr>
+          return <tr>{leftImg}<td className='img' onClick={props.onClick}><img src={imgSrc}></img></td></tr>
         }
       })}
       </tr>
