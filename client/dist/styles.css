@@ -4,7 +4,7 @@
   max-width: 100%;
 }
 
-img {
+.rImg {
   max-width: 100%;
   height: auto;
 }
@@ -13,7 +13,7 @@ img {
   max-width: 100%
 }
 
-button {
+.rButton {
   border: none;
   background-color: transparent;
   outline: none;

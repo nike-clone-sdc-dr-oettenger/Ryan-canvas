@@ -3,7 +3,7 @@ import '../../dist/styles.css';
 
 const FullSize = (props) => (
   <div>
-    <button onClick={props.onClick} font-weight='bold'>x</button>
+    <button className='rButton' onClick={props.onClick} font-weight='bold'>x</button>
     <div>{props.images}</div>
     <table className='fullSize'>
       <tr>
