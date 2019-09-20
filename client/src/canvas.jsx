@@ -13,7 +13,8 @@ const customStyle = {
     top: '1px',
     left: '1px',
     right: '1px',
-    bottom: '1px'
+    bottom: '1px',
+    padding: '0px'
   }
 }
 

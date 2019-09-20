@@ -46,5 +46,5 @@ app.get('/api/recommendedImage', (req, res) => {
 })
 
 app.listen(port, () => {
-  console.log(`Image server is running on http://18.207.197.100:${port}/`);
+  console.log(`Image server is running on http://http://18.207.197.100:${port}/`);
 })
