@@ -44,7 +44,67 @@ app.get('/api/recommendedImage', (req, res) => {
   });
 
 })
+/*****************NEW ENDPOINTS********************/
+app.post('/api/images', (req, res) => {
+  res.setHeader('access-control-allow-origin', '*');
+  let shoe = new Shoe_Images(req.body);
+  //CURL + DELETE terminal commands
+  //curl -d "shoe_id=999&img1=1&img2=2&img3=3&img4=4&img5=5&img6=6&img7=7&vid1=vid1&vid2=vid2" -X POST http://localhost:1121/api/images
+  //db.shoe_images.remove({shoe_id: 999})
+  shoe.save((err, data) => {
+    if (err) {
+      console.log('error saving', shoe, err)
+      res.status(500);
+      res.send('error saving shoe');
+    } else {
+      console.log(`shoe ${shoe.shoe_id} saved successfully`)
+      res.status(201);
+      res.send(`shoe ${shoe.shoe_id} saved successfully`);
+    }
+  })
+})
+
+app.delete('/api/images', (req, res) => {
+  res.setHeader('access-control-allow-origin', '*');
+  //curl -d "shoe_id=999" -X DELETE http://localhost:1121/api/images
+  //db.shoe_images.find({shoe_id: 999})
+  Shoe_Images.remove({shoe_id: req.body.shoe_id}, (err) => {
+    if (err) {
+      console.log('erorr deleting shoe', shoe.shoe_id, err)
+      res.status(500);
+    } else {
+      res.status(200);
+      res.send(`shoe ${req.body.shoe_id} deleted successfully`)
+    }
+  })
+})
+
+app.put('/api/images', (req, res) => {
+  res.setHeader('access-control-allow-origin', '*');
+  //curl -d "shoe_id=999&img1=newimg1" -X PUT http://localhost:1121/api/images
+  Shoe_Images.update({shoe_id: req.body.shoe_id},
+    {
+      img1: req.body.img1,
+      img2: req.body.img2,
+      img3: req.body.img3,
+      img4: req.body.img4,
+      img5: req.body.img5,
+      img6: req.body.img6,
+      img7: req.body.img7,
+      vid1: req.body.vid1,
+      vid2: req.body.vid2
+    }, (err) => {
+      if (err) {
+        console.log('error updating', req.body.shoe_id)
+        res.status(500);
+        res.end();
+      } else {
+        res.status(200);
+        res.send('successfully updated');
+      }
+    })
+})
 
 app.listen(port, () => {
-  console.log(`Image server is running on http://18.207.197.100:${port}/`);
+  console.log(`Image server is running on http://localhost:${port}/`);
 })
