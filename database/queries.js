@@ -1,12 +1,19 @@
 //postgres config
-const Pool = require('pg').Pool
 const psqlconfig = require('./login.config.js').psql
-const pool = new Pool({
+const Pool = require('pg').Pool
+
+const connectionOptions = {
   user: psqlconfig.user,
-  host: psqlconfig.password,
+  password: psqlconfig.password,
+  host: psqlconfig.host,
   database: psqlconfig.database,
   port: psqlconfig.pgport
-})
+}
+
+
+const pool = new Pool(connectionOptions)
+
+
 
 const postgresPost = (x, callback) => {
   const values = [x.shoe_id, x.img1, x.img2, x.img3, x.img4, x.img5, x.img6, x.img7, x.vid1, x.vid2]
@@ -20,8 +27,11 @@ const postgresPost = (x, callback) => {
   })
 }
 
+
+
 module.exports = {
   postgres: {
-    post: postgresPost
+    post: postgresPost,
+    connectionOptions: connectionOptions
   }
 };

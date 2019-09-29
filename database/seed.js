@@ -16,6 +16,7 @@ request.get(`https://api.unsplash.com/search/photos/?query=nike&per_page=500&cli
   let imgsToSave = [];
   for (let shoeCount = 0; shoeCount < 50; shoeCount++) {
     let images = {};
+    console.log(body.results.length)
     images.shoe_id = shoeCount;
     images.img1 = body.results[(5 * shoeCount)].urls.raw;
     images.img2 = body.results[(5 * shoeCount) + 1].urls.raw;
