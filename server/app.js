@@ -2,6 +2,7 @@ const express = require('express');
 const {Shoe_Images} = require('../database/schemas.js');
 const app = express();
 const port = 1121;
+const queries = require('../database/queries.js')
 
 app.use(express.urlencoded());
 app.use(express.json());
@@ -48,9 +49,16 @@ app.get('/api/recommendedImage', (req, res) => {
 app.post('/api/images', (req, res) => {
   res.setHeader('access-control-allow-origin', '*');
   let shoe = new Shoe_Images(req.body);
-  //CURL + DELETE terminal commands
+
+  //example postgres query
+  queries.postgres.post({shoe_id: req.body.shoe_id}, (x) => {
+    console.log('*****************\n SUCCESS?', x)
+  })
+
+
+  //CURL terminal commands
   //curl -d "shoe_id=999&img1=1&img2=2&img3=3&img4=4&img5=5&img6=6&img7=7&vid1=vid1&vid2=vid2" -X POST http://localhost:1121/api/images
-  //db.shoe_images.remove({shoe_id: 999})
+  // DELETE the record created in MongoDB -> db.shoe_images.remove({shoe_id: 999})
   shoe.save((err, data) => {
     if (err) {
       console.log('error saving', shoe, err)
