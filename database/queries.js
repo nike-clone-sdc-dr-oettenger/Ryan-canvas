@@ -9,8 +9,6 @@ const connectionOptions = {
   database: psqlconfig.database,
   port: psqlconfig.pgport
 }
-
-
 const pool = new Pool(connectionOptions)
 
 
