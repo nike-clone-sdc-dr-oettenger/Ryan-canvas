@@ -40,6 +40,7 @@ const connectionOptions = {
 }
 
 - OPTIMIZATION:
+  - \timing command in psql terminal to add timings to query results
   - create index shoe_images_shoe_id on shoe_images(shoe_id);
 
 
@@ -48,3 +49,6 @@ const connectionOptions = {
 - installed with homebrew 'brew install couchdb'
 - started with 'couchdb' (started a server, can view on localhost)
   - default port 5984
+
+- using library nano (via npm) 
+- critical when selecting to include the setting { include_docs: true }

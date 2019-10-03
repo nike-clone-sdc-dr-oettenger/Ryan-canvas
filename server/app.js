@@ -7,8 +7,8 @@ const queries = require('../database/queries.js')
 app.use(express.urlencoded());
 app.use(express.json());
 
-/*CHOOSEN DATABASE*/
-const database = process.env.database || 'postgres'
+/*CHOOSE A DATABASE*/
+const database = process.env.database || 'couchDB' //['mongoDB', 'couchDB', 'postgres']
 /******************/
 
 app.use(express.static(__dirname + '/../client/dist'))
@@ -27,11 +27,14 @@ app.get('/api/images', (req, res) => {
     })
   } else if (database === 'postgres') {
     queries.postgres.getOne(shoe, (shoeImage) => {
-      console.log('yay shoes ', shoeImage)
+      // console.log('yay postgres shoes ', shoeImage)
       res.json([shoeImage.img1,shoeImage.img2,shoeImage.img3,shoeImage.img4,shoeImage.img5]);
     })
   } else if (database === 'couchDB') {
-
+    queries.couchDB.getOne(shoe, (shoeImage) => {
+      // console.log('yay couchDB shoes', shoeImage)
+      res.json([shoeImage.img1,shoeImage.img2,shoeImage.img3,shoeImage.img4,shoeImage.img5]);
+    })
   } else {
     res.send('no database chosen on backend')
   }
