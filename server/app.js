@@ -7,18 +7,36 @@ const queries = require('../database/queries.js')
 app.use(express.urlencoded());
 app.use(express.json());
 
+/*CHOOSEN DATABASE*/
+const database = process.env.database || 'postgres'
+/******************/
+
 app.use(express.static(__dirname + '/../client/dist'))
 
 app.get('/api/images', (req, res) => {
   let shoe = req.query.shoe_id;
   res.setHeader('access-control-allow-origin', '*');
-  Shoe_Images.findOne({shoe_id: shoe}).then((shoeImage) => {
-    if (!shoeImage) {
-      res.send('This shoe does not exist!');
-    } else {
+  
+  if(database === 'mongoDB') {
+    Shoe_Images.findOne({shoe_id: shoe}).then((shoeImage) => {
+      if (!shoeImage) {
+        res.send('This shoe does not exist!');
+      } else {
+        res.json([shoeImage.img1,shoeImage.img2,shoeImage.img3,shoeImage.img4,shoeImage.img5]);
+      }
+    })
+  } else if (database === 'postgres') {
+    queries.postgres.getOne(shoe, (shoeImage) => {
+      console.log('yay shoes ', shoeImage)
       res.json([shoeImage.img1,shoeImage.img2,shoeImage.img3,shoeImage.img4,shoeImage.img5]);
-    }
-  })
+    })
+  } else if (database === 'couchDB') {
+
+  } else {
+    res.send('no database chosen on backend')
+  }
+
+
 })
 
 app.get('/api/recommendedImage', (req, res) => {
@@ -54,7 +72,6 @@ app.post('/api/images', (req, res) => {
   queries.postgres.post({shoe_id: req.body.shoe_id}, (x) => {
     console.log('*****************\n SUCCESS?', x)
   })
-
 
   //CURL terminal commands
   //curl -d "shoe_id=999&img1=1&img2=2&img3=3&img4=4&img5=5&img6=6&img7=7&vid1=vid1&vid2=vid2" -X POST http://localhost:1121/api/images

@@ -33,10 +33,11 @@ test('Requesting shoe images should return error message if shoe does not exist 
 test('Requesting shoe images should return an array of 5 images.', (done) => {
   request.get('http://localhost:1121/api/images', { qs: { shoe_id: 13 }} , (err, res) => {
     let body = JSON.parse(res.body);
+    console.log('***********************\n body', body)
     expect(body.length).toBe(5);
     done();
   })
-})
+}).
 
 test('Requesting a recommended shoe image should return error message if shoe does not exist in database.', (done) => {
   request.get('http://localhost:1121/api/recommendedImage', { qs: {shoesArr: [1, 3, 100]} } , (err, res) => {
