@@ -7,7 +7,6 @@ const pgp = require('pg-promise')({
 })
 
 let options = queries.postgres.connectionOptions;
-options.poolSize = 20;
 const db = pgp(options);
 
 
@@ -77,7 +76,7 @@ const batchInsert = (insertRows, totalRecords, batchSize) => {
 
   db.tx('massive-insert', t => {
     return t.sequence(index => {
-      return getNextData(t, index * batchSize);
+      return getNextData(t, index * batchSize)
         .then(data => {
           if (data) {
             const cs = new pgp.helpers.ColumnSet(['shoe_id', 'img1', 'img2', 'img3', 'img4', 'img5', 'img6', 'img7', 'vid1', 'vid2'], { table: 'shoe_images' });

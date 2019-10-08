@@ -13,8 +13,11 @@ Picture and/or Video demo of product on page
 - 2019-10-01: Using library Nano for CouchDB.  Successfully seeded 10M records.
   - inserted 10,000,000 in 1277,83 seconds using batch size of 10,000
 - 2019-10-02: Added select 1 query for Postgres.  Initial query times were 17-18seconds to select the last row in the table.  Adding an index reduced to a few miliseconds
+- 2019-10-03: Added post 1 record for Postgres.  Post query runs about as fast as select.  Added getOne and post queries for couchDB.  CouchDB queries seem to be running slower, which is surprising.
+- 2019-10-05: Initial performance testing using httperf: Both databases easily handle loads up to 200RPS.  I'm running into an error with an httperf (open file limit > FD_SETSIZE).  Spent time trying to debug with no issue.  Looking into other load testers (locustio, jmeter, artillery).
 
 
+## Optimizations
 
 
 
@@ -44,7 +47,6 @@ const connectionOptions = {
   - create index shoe_images_shoe_id on shoe_images(shoe_id);
 
 
-
 # Couchdb
 - installed with homebrew 'brew install couchdb'
 - started with 'couchdb' (started a server, can view on localhost)
@@ -52,3 +54,23 @@ const connectionOptions = {
 
 - using library nano (via npm) 
 - critical when selecting to include the setting { include_docs: true }
+
+# Load Testers - Using K6 after experimentation
+
+-  httperf installed with homebrew 'brew instsall httperf' 
+  - httperf example command 'httperf --server localhost --port 1121 --num-conn 6000 --num-call 1 --timeout 5 --rate 100'
+    - 6000 total connections @ 100 per second
+  - running into errors with open file limit > FD_SETSIZE when rate > 200
+
+- locustio installed with homebrew 'pip install locustio' 
+- created locustfile.py based on example in documentation
+- run terminal command to start it (from working directory with locustfile.py) locust --host=http://localhost:1121
+- go to localhost:8089 to turn it on
+- can't directly set the RPS: having trouble going over 250 RPS with different configuration setups
+
+- K6 installed with 'brew install k6'
+- script file k6.js contains the script.  It can also  contain options or they can be run from command line
+- example command line to run the script 'k6 run --vus 500 -d 120s --throw k6.js'
+- to increase open connection limit 'sudo sysctl -w kern.ipc.somaxconn=1024
+- 
+

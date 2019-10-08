@@ -1,3 +1,4 @@
+require('newrelic');
 const express = require('express');
 const {Shoe_Images} = require('../database/schemas.js');
 const app = express();
@@ -8,7 +9,7 @@ app.use(express.urlencoded());
 app.use(express.json());
 
 /*CHOOSE A DATABASE*/
-const database = process.env.database || 'couchDB' //['mongoDB', 'couchDB', 'postgres']
+const database = process.env.database || 'postgres' //['mongoDB', 'couchDB', 'postgres']
 /******************/
 
 app.use(express.static(__dirname + '/../client/dist'))
@@ -16,26 +17,34 @@ app.use(express.static(__dirname + '/../client/dist'))
 app.get('/api/images', (req, res) => {
   let shoe = req.query.shoe_id;
   res.setHeader('access-control-allow-origin', '*');
-  
   if(database === 'mongoDB') {
     Shoe_Images.findOne({shoe_id: shoe}).then((shoeImage) => {
       if (!shoeImage) {
+        res.status(500);
         res.send('This shoe does not exist!');
       } else {
+        res.status(200);
         res.json([shoeImage.img1,shoeImage.img2,shoeImage.img3,shoeImage.img4,shoeImage.img5]);
       }
     })
   } else if (database === 'postgres') {
     queries.postgres.getOne(shoe, (shoeImage) => {
+      if(!shoeImage) {
+        res.status(500);
+        res.send('This shoe does not exist!');
+      }
       // console.log('yay postgres shoes ', shoeImage)
+      res.status(200);
       res.json([shoeImage.img1,shoeImage.img2,shoeImage.img3,shoeImage.img4,shoeImage.img5]);
     })
   } else if (database === 'couchDB') {
     queries.couchDB.getOne(shoe, (shoeImage) => {
       // console.log('yay couchDB shoes', shoeImage)
+      res.status(200);
       res.json([shoeImage.img1,shoeImage.img2,shoeImage.img3,shoeImage.img4,shoeImage.img5]);
     })
   } else {
+    res.status(500);
     res.send('no database chosen on backend')
   }
 

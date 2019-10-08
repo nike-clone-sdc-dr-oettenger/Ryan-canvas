@@ -67,7 +67,6 @@ const createBatch = (size) => {
 
 const batchInsert = (records, size) => {
   shoe_images.bulk({docs: records}).then((data) => {
-    console.log('data', data)
     totalInserts += size;
     successCount += 1;
     let end = new Date();
