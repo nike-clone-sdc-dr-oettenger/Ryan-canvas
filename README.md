@@ -15,6 +15,8 @@ Picture and/or Video demo of product on page
 - 2019-10-02: Added select 1 query for Postgres.  Initial query times were 17-18seconds to select the last row in the table.  Adding an index reduced to a few miliseconds
 - 2019-10-03: Added post 1 record for Postgres.  Post query runs about as fast as select.  Added getOne and post queries for couchDB.  CouchDB queries seem to be running slower, which is surprising.
 - 2019-10-05: Initial performance testing using httperf: Both databases easily handle loads up to 200RPS.  I'm running into an error with an httperf (open file limit > FD_SETSIZE).  Spent time trying to debug with no issue.  Looking into other load testers (locustio, jmeter, artillery).
+- 2019-10-08: Switched to K6 for load testing.  Achieved 1,000 GET requests per second with reasonable latency.
+- 2019-10-10: Refactoring and writing some notes.  Taking screenshots of query timings and preparing for mid-point conversation video.  Refactored postgres post query.
 
 
 ## Optimizations
@@ -58,7 +60,7 @@ const connectionOptions = {
 # Load Testers - Using K6 after experimentation
 
 -  httperf installed with homebrew 'brew instsall httperf' 
-  - httperf example command 'httperf --server localhost --port 1121 --num-conn 6000 --num-call 1 --timeout 5 --rate 100'
+  - httperf example command 'httperf --server localhost --port 1121 --uri /api/images/?shoe_id=0 --num-conn 6000 --num-call 1 --timeout 5 --rate 100'
     - 6000 total connections @ 100 per second
   - running into errors with open file limit > FD_SETSIZE when rate > 200
 
@@ -70,7 +72,7 @@ const connectionOptions = {
 
 - K6 installed with 'brew install k6'
 - script file k6.js contains the script.  It can also  contain options or they can be run from command line
-- example command line to run the script 'k6 run --vus 500 -d 120s --throw k6.js'
-- to increase open connection limit 'sudo sysctl -w kern.ipc.somaxconn=1024
-- 
-
+- k6 environment variables: __ENV.k6_type is in k6.js and defaults to GET
+  - __ENV.k6_url defaults to http://localhost:1121
+- example command line to run the script ' k6_type=GET k6 run --vus 50 -d 600s --throw --rps 1500 k6.js'
+- increase max number of connections run 'sysctl sysctl kern.ipc.somaxconn=2048'
