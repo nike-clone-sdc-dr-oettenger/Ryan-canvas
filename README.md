@@ -11,11 +11,11 @@ Picture and/or Video demo of product on page
   - inserted 10,000,000 in 469.616 seconds using batch size of 10,000
 - 2019-09-30: tried out Cassandra, Riak, CouchDB installation/configurations.  Using CouchDB as second database
 - 2019-10-01: Using library Nano for CouchDB.  Successfully seeded 10M records.
-  - inserted 10,000,000 in 1277,83 seconds using batch size of 10,000
+  - inserted 10,000,000 in 1,277 seconds using batch size of 10,000
 - 2019-10-02: Added select 1 query for Postgres.  Initial query times were 17-18seconds to select the last row in the table.  Adding an index reduced to a few miliseconds
 - 2019-10-03: Added post 1 record for Postgres.  Post query runs about as fast as select.  Added getOne and post queries for couchDB.  CouchDB queries seem to be running slower, which is surprising.
 - 2019-10-05: Initial performance testing using httperf: Both databases easily handle loads up to 200RPS.  I'm running into an error with an httperf (open file limit > FD_SETSIZE).  Spent time trying to debug with no issue.  Looking into other load testers (locustio, jmeter, artillery).
-- 2019-10-08: Switched to K6 for load testing.  Achieved 1,000 GET requests per second with reasonable latency.
+- 2019-10-08: Switched to K6 for load testing.  Achieved 1,000 GET requests per second with reasonable latency.  POST requests also run stable, but the latency is slower
 - 2019-10-10: Refactoring and writing some notes.  Taking screenshots of query timings and preparing for mid-point conversation video.  Refactored postgres post query.
 
 
@@ -74,5 +74,18 @@ const connectionOptions = {
 - script file k6.js contains the script.  It can also  contain options or they can be run from command line
 - k6 environment variables: __ENV.k6_type is in k6.js and defaults to GET
   - __ENV.k6_url defaults to http://localhost:1121
-- example command line to run the script ' k6_type=GET k6 run --vus 50 -d 600s --throw --rps 1500 k6.js'
+- Example command line to run the script ' k6_type=GET k6 run --vus 50 -d 600s --throw --rps 1000 k6.js'
 - increase max number of connections run 'sysctl sysctl kern.ipc.somaxconn=2048'
+
+
+# Deployment Config / Setup
+- launch EC2 instance and enter ssh command into terminal
+- download docker and start postgres
+  - sudo yum install docker
+  - sudo service docker start
+  - sudo usermod -a -G docker ec2-user
+  - log out, then log back in
+  - docker pull postgres
+- start postgres: https://hub.docker.com/_/postgres
+- docker run --name some-postgres -e POSTGRES_PASSWORD=mysecretpassword -d postgres
+- 

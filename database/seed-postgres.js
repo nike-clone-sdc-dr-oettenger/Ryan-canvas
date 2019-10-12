@@ -1,5 +1,3 @@
-
-const psqlconfig = require('./login.config.js').psql;
 const queries = require('./queries.js');
 /*********Seeding Script and connections****************/
 const pgp = require('pg-promise')({
