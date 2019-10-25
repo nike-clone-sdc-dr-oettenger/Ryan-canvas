@@ -79,7 +79,7 @@ const connectionOptions = {
 
 
 # Deployment Config / Setup
-- launch EC2 instance and enter ssh command into terminal
+- launch EC2 instance and enter ssh command into terminal (make sure in ssh folder: cd ~/.ssh )
 - download docker and start postgres
   - sudo yum install docker
   - sudo service docker start
@@ -89,3 +89,24 @@ const connectionOptions = {
 - start postgres: https://hub.docker.com/_/postgres
 - docker run --name some-postgres -e POSTGRES_PASSWORD=mysecretpassword -d postgres
 - 
+
+# without docker
+ - ssh into EC2 instance
+ - install postgres: sudo yum install postgresql postgresql-server postgresql-devel postgresql-contrib postgresql-docs
+ - edit this config file: sudo vim /var/lib/pgsql/data/pg_hba.conf
+  - add these IPv4 connections:
+    - host  all  power_user  0.0.0.0/0  md5
+    - host  all  other_user  0.0.0.0/0  md5
+    - host  all  storageLoader 0.0.0.0/0  md5
+ - also edit this config to allow users to connect remotely: sudo vim /var/lib/pgsql/data/postgresql.conf
+  - uncomment the following: 
+    - listen addresses = '*' 
+    - port=5432
+- I can now start server with: sudo service postgresql start
+- log in with these 2 commands
+  - sudo su - postgres
+  - psql -U postgres
+- Set up the database:
+- CREATE DATABASE nike_canvas;
+- CREATE TABLE Shoe_Images (ID SERIAL PRIMARY KEY, shoe_id int, img1 VARCHAR(255), img2 VARCHAR(255), img3 VARCHAR(255), img4 VARCHAR(255), img5 VARCHAR(255), img6 VARCHAR(255), img7 VARCHAR(255), vid1 VARCHAR(255), vid2 VARCHAR(255));
+

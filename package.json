@@ -10,7 +10,7 @@
     "test": "jest",
     "start": "concurrently --kill-others \"npm run db:setup\" \"npm run server:start\"",
     "server:start": "nodemon server/app.js",
-    "db:setup": "node database/seed.js",
+    "db:setup": "node database/seed-postgres.js",
     "build": "webpack --watch"
   },
   "author": "Richard Kang",

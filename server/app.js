@@ -28,6 +28,7 @@ app.get('/api/images', (req, res) => {
       }
     })
   } else if (database === 'postgres') {
+    console.log('get req to postgres db')
     queries.postgres.getOne(shoe, (shoeImage) => {
       if (!shoeImage) {
         res.status(500);
