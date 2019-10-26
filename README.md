@@ -17,7 +17,11 @@ Picture and/or Video demo of product on page
 - 2019-10-05: Initial performance testing using httperf: Both databases easily handle loads up to 200RPS.  I'm running into an error with an httperf (open file limit > FD_SETSIZE).  Spent time trying to debug with no issue.  Looking into other load testers (locustio, jmeter, artillery).
 - 2019-10-08: Switched to K6 for load testing.  Achieved 1,000 GET requests per second with reasonable latency.  POST requests also run stable, but the latency is slower
 - 2019-10-10: Refactoring and writing some notes.  Taking screenshots of query timings and preparing for mid-point conversation video.  Refactored postgres post query.
-
+- 2019-10-12: Video recording for mid-point conversation.  Begin MVP break week.
+- 2019-10-19: Finish MVP break.  Start researching deployment without docker.
+- 2019-10-21: Deployed postgres to AWS.
+- 2019-10-23: Connected service to deployed database.  Deployed service to AWS.
+- 2019-10-25: Take initial speed notes.
 
 ## Optimizations
 
@@ -78,20 +82,8 @@ const connectionOptions = {
 - increase max number of connections run 'sysctl sysctl kern.ipc.somaxconn=2048'
 
 
-# Deployment Config / Setup
+# Deployment Config / Setup (without Docker)
 - launch EC2 instance and enter ssh command into terminal (make sure in ssh folder: cd ~/.ssh )
-- download docker and start postgres
-  - sudo yum install docker
-  - sudo service docker start
-  - sudo usermod -a -G docker ec2-user
-  - log out, then log back in
-  - docker pull postgres
-- start postgres: https://hub.docker.com/_/postgres
-- docker run --name some-postgres -e POSTGRES_PASSWORD=mysecretpassword -d postgres
-- 
-
-# without docker
- - ssh into EC2 instance
  - install postgres: sudo yum install postgresql postgresql-server postgresql-devel postgresql-contrib postgresql-docs
  - edit this config file: sudo vim /var/lib/pgsql/data/pg_hba.conf
   - add these IPv4 connections:
@@ -114,3 +106,4 @@ const connectionOptions = {
 # deploying service
 - follow this to install node: https://docs.aws.amazon.com/sdk-for-javascript/v2/developer-guide/setting-up-node-on-ec2-instance.html
 - sudo yum install git
+- ssh into the instance and start the server
