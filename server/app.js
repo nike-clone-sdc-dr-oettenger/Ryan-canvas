@@ -82,7 +82,7 @@ app.post('/api/images', (req, res) => {
   res.setHeader('access-control-allow-origin', '*');
   let shoe = new Shoe_Images(req.body);
   //CURL terminal commands
-  //curl -d "shoe_id=999&img1=1&img2=2&img3=3&img4=4&img5=5&img6=6&img7=7&vid1=vid1&vid2=vid2" -X POST http://localhost:1121/api/images
+  //curl -d "shoe_id=999&img1=1&img2=2&img3=3&img4=4&img5=5&img6=6&img7=7&vid1=vid1&vid2=vid2" -X POST http://ec2-18-237-87-30.us-west-2.compute.amazonaws.com:1121/api/images
   // DELETE the record created in MongoDB -> db.shoe_images.remove({shoe_id: 999})
   if (database === 'mongoDB') {
     shoe.save((err, data) => {
@@ -99,7 +99,7 @@ app.post('/api/images', (req, res) => {
   } else if (database === 'postgres') {
     //example postgres query
     queries.postgres.post({ shoe_id: req.body.shoe_id }, (data) => {
-      //console.log('*****************\n SUCCESS?', data.command, data.rowCount)
+      console.log('*****************\n SUCCESS?', data.command, data.rowCount)
       res.status(201);
       res.end();
     })

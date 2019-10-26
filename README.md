@@ -14,7 +14,12 @@ Picture and/or Video demo of product on page
 |Postgres | GET | 10 | 74ms | 600 RPM | 0% | |
 |Postgres | GET | 100 | 73ms | 6000 RPM | 0% | |
 |Postgres | GET | 1000 | 73ms | 59388 RPM | 0% | |
-|Postgres | GET | 10000 | 1691MS | - | 0% | Error threshold after 10 seconds|
+|Postgres | GET | 10000 | 1691MS | - | 54% | Error threshold after 10 seconds|
+|Postgres | POST | 1 | TBDms | TBD RPM | 0% | |
+|Postgres | POST | 10 | TBDms | TBD RPM | 0% | |
+|Postgres | POST | 100 | TBDms | TBD RPM | 0% | |
+|Postgres | POST | 1000 | TBDms | TBD RPM | 0% | |
+
 
 
 
@@ -42,6 +47,7 @@ const connectionOptions = {
 - OPTIMIZATION:
   - \timing command in psql terminal to add timings to query results
   - ## create index shoe_images_shoe_id on shoe_images(shoe_id);
+  - index reduced query time for select 1 from ~18 seconds to a few miliseconds
 
 
 # Couchdb
@@ -73,7 +79,9 @@ const connectionOptions = {
 - increase max number of connections run 'sysctl sysctl kern.ipc.somaxconn=2048'
 
 
-# Deployment Config / Setup (without Docker)
+## Deployment Config / Setup (without Docker)
+
+# Deploying Database instance
 - launch EC2 instance and enter ssh command into terminal (make sure in ssh folder: cd ~/.ssh )
  - install postgres: sudo yum install postgresql postgresql-server postgresql-devel postgresql-contrib postgresql-docs
  - edit this config file: sudo vim /var/lib/pgsql/data/pg_hba.conf
@@ -94,10 +102,13 @@ const connectionOptions = {
 - CREATE DATABASE nike_canvas;
 - CREATE TABLE Shoe_Images (ID SERIAL PRIMARY KEY, shoe_id int, img1 VARCHAR(255), img2 VARCHAR(255), img3 VARCHAR(255), img4 VARCHAR(255), img5 VARCHAR(255), img6 VARCHAR(255), img7 VARCHAR(255), vid1 VARCHAR(255), vid2 VARCHAR(255));
 
-# deploying service
+# Deploying Service Instance
 - follow this to install node: https://docs.aws.amazon.com/sdk-for-javascript/v2/developer-guide/setting-up-node-on-ec2-instance.html
 - sudo yum install git
 - ssh into the instance and start the server
+
+# Loaderio
+- download the
 
 
 
