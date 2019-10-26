@@ -3,27 +3,17 @@ Picture and/or Video demo of product on page
 
 
 
-## Journal
-- 2019-09-27: Added POST, PUT, DELETE routes
-- 2019-09-28: Added tests for new server routes
-- 2019-09-28: 5am Postgres instal/config issues finally finished.  Successful mass insert scrips using pg-promise library.  Fought for hours with memory issues, finally got seed script for postgres working.
-  - inserted 10,000,000 in 650.409 seconds using batch size of 100,000
-  - inserted 10,000,000 in 469.616 seconds using batch size of 10,000
-- 2019-09-30: tried out Cassandra, Riak, CouchDB installation/configurations.  Using CouchDB as second database
-- 2019-10-01: Using library Nano for CouchDB.  Successfully seeded 10M records.
-  - inserted 10,000,000 in 1,277 seconds using batch size of 10,000
-- 2019-10-02: Added select 1 query for Postgres.  Initial query times were 17-18seconds to select the last row in the table.  Adding an index reduced to a few miliseconds
-- 2019-10-03: Added post 1 record for Postgres.  Post query runs about as fast as select.  Added getOne and post queries for couchDB.  CouchDB queries seem to be running slower, which is surprising.
-- 2019-10-05: Initial performance testing using httperf: Both databases easily handle loads up to 200RPS.  I'm running into an error with an httperf (open file limit > FD_SETSIZE).  Spent time trying to debug with no issue.  Looking into other load testers (locustio, jmeter, artillery).
-- 2019-10-08: Switched to K6 for load testing.  Achieved 1,000 GET requests per second with reasonable latency.  POST requests also run stable, but the latency is slower
-- 2019-10-10: Refactoring and writing some notes.  Taking screenshots of query timings and preparing for mid-point conversation video.  Refactored postgres post query.
-- 2019-10-12: Video recording for mid-point conversation.  Begin MVP break week.
-- 2019-10-19: Finish MVP break.  Start researching deployment without docker.
-- 2019-10-21: Deployed postgres to AWS.
-- 2019-10-23: Connected service to deployed database.  Deployed service to AWS.
-- 2019-10-25: Take initial speed notes.
+
 
 ## Optimizations
+
+# Initial Performance
+|Database |	Route	| RPS	| LATENCY	| THROUGHPUT	| ERROR RATE | Note |
+|Postgres | GET | 1 | 74ms | 60 RPM | 0% | |
+|Postgres | GET | 10 | 74ms | 600 RPM | 0% | |
+|Postgres | GET | 100 | 73ms | 6000 RPM | 0% | |
+|Postgres | GET | 1000 | 73ms | 59388 RPM | 0% | |
+|Postgres | GET | 10000 | 1691MS | - | 0% | Error threshold after 10 seconds|
 
 
 
@@ -50,7 +40,7 @@ const connectionOptions = {
 
 - OPTIMIZATION:
   - \timing command in psql terminal to add timings to query results
-  - create index shoe_images_shoe_id on shoe_images(shoe_id);
+  - ## create index shoe_images_shoe_id on shoe_images(shoe_id);
 
 
 # Couchdb
@@ -61,7 +51,7 @@ const connectionOptions = {
 - using library nano (via npm) 
 - critical when selecting to include the setting { include_docs: true }
 
-# Load Testers - Using K6 after experimentation
+# Load Testers - Used K6 for local testing after experimentation
 
 -  httperf installed with homebrew 'brew instsall httperf' 
   - httperf example command 'httperf --server localhost --port 1121 --uri /api/images/?shoe_id=0 --num-conn 6000 --num-call 1 --timeout 5 --rate 100'
@@ -107,3 +97,25 @@ const connectionOptions = {
 - follow this to install node: https://docs.aws.amazon.com/sdk-for-javascript/v2/developer-guide/setting-up-node-on-ec2-instance.html
 - sudo yum install git
 - ssh into the instance and start the server
+
+
+
+## Journal
+- 2019-09-27: Added POST, PUT, DELETE routes
+- 2019-09-28: Added tests for new server routes
+- 2019-09-28: 5am Postgres instal/config issues finally finished.  Successful mass insert scrips using pg-promise library.  Fought for hours with memory issues, finally got seed script for postgres working.
+  - inserted 10,000,000 in 650.409 seconds using batch size of 100,000
+  - inserted 10,000,000 in 469.616 seconds using batch size of 10,000
+- 2019-09-30: tried out Cassandra, Riak, CouchDB installation/configurations.  Using CouchDB as second database
+- 2019-10-01: Using library Nano for CouchDB.  Successfully seeded 10M records.
+  - inserted 10,000,000 in 1,277 seconds using batch size of 10,000
+- 2019-10-02: Added select 1 query for Postgres.  Initial query times were 17-18seconds to select the last row in the table.  Adding an index reduced to a few miliseconds
+- 2019-10-03: Added post 1 record for Postgres.  Post query runs about as fast as select.  Added getOne and post queries for couchDB.  CouchDB queries seem to be running slower, which is surprising.
+- 2019-10-05: Initial performance testing using httperf: Both databases easily handle loads up to 200RPS.  I'm running into an error with an httperf (open file limit > FD_SETSIZE).  Spent time trying to debug with no issue.  Looking into other load testers (locustio, jmeter, artillery).
+- 2019-10-08: Switched to K6 for load testing.  Achieved 1,000 GET requests per second with reasonable latency.  POST requests also run stable, but the latency is slower
+- 2019-10-10: Refactoring and writing some notes.  Taking screenshots of query timings and preparing for mid-point conversation video.  Refactored postgres post query.
+- 2019-10-12: Video recording for mid-point conversation.  Begin MVP break week.
+- 2019-10-19: Finish MVP break.  Start researching deployment without docker.
+- 2019-10-21: Deployed postgres to AWS.
+- 2019-10-23: Connected service to deployed database.  Deployed service to AWS.
+- 2019-10-25: Take initial speed notes.
