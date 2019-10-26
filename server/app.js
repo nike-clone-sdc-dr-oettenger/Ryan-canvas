@@ -1,6 +1,6 @@
 require('newrelic');
 const express = require('express');
-const { Shoe_Images } = require('../database/schemas.js');
+// const { Shoe_Images } = require('../database/schemas.js');
 const app = express();
 const port = 1121;
 const queries = require('../database/queries.js')
@@ -28,7 +28,7 @@ app.get('/api/images', (req, res) => {
       }
     })
   } else if (database === 'postgres') {
-    console.log('get req to postgres db')
+    // console.log('get req to postgres db')
     queries.postgres.getOne(shoe, (shoeImage) => {
       if (!shoeImage) {
         res.status(500);
