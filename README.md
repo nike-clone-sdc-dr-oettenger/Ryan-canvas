@@ -8,7 +8,8 @@ Picture and/or Video demo of product on page
 ## Optimizations
 
 # Initial Performance
-|Database |	Route	| RPS	| LATENCY	| THROUGHPUT	| ERROR RATE | Note |
+|Database |	Route	| RPS	| LATENCY	| THROUGHPUT | ERROR RATE | Note |
+|-------- | ----- | --- | ------- | ---------- | ---------- | ---- | 
 |Postgres | GET | 1 | 74ms | 60 RPM | 0% | |
 |Postgres | GET | 10 | 74ms | 600 RPM | 0% | |
 |Postgres | GET | 100 | 73ms | 6000 RPM | 0% | |
