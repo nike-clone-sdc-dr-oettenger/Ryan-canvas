@@ -12,13 +12,16 @@ Picture and/or Video demo of product on page
 |-------- | ----- | --- | ------- | ---------- | ---------- | ---- | 
 |Postgres | GET | 1 | 74ms | 60 RPM | 0% | |
 |Postgres | GET | 10 | 74ms | 600 RPM | 0% | |
-|Postgres | GET | 100 | 73ms | 6000 RPM | 0% | |
-|Postgres | GET | 1000 | 73ms | 59388 RPM | 0% | |
-|Postgres | GET | 10000 | 1691MS | - | 54% | Error threshold after 10 seconds|
-|Postgres | POST | 1 | TBDms | TBD RPM | 0% | |
-|Postgres | POST | 10 | TBDms | TBD RPM | 0% | |
-|Postgres | POST | 100 | TBDms | TBD RPM | 0% | |
-|Postgres | POST | 1000 | TBDms | TBD RPM | 0% | |
+|Postgres | GET | 100 | 73ms | 6,000 RPM | 0% | |
+|Postgres | GET | 1,000 | 73ms | 59,388 RPM | 0% | |
+|Postgres | GET | 10,000 | 1691MS | - | 53% | Error threshold after 10 seconds|
+|Postgres | POST | 1 | 80ms | 60 RPM | 0% | |
+|Postgres | POST | 10 | 76 ms | 600 RPM | 0% | |
+|Postgres | POST | 100 | 74 ms | 5,926 RPM | 0% | |
+|Postgres | POST | 1,000 | 76 ms | 59,358 RPM | 0% | |
+|Postgres | GET | 10,000 | 941 MS | - | 3% | Error threshold after 3 seconds|
+
+
 
 
 
@@ -108,7 +111,8 @@ const connectionOptions = {
 - ssh into the instance and start the server
 
 # Loaderio
-- download the
+- download the loaderio key (will be a .txt file) and save in /client/dist folder
+- verify ec2 instance and start setting up tests
 
 
 
