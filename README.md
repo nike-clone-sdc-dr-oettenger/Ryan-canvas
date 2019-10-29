@@ -8,19 +8,23 @@ Picture and/or Video demo of product on page
 ## Optimizations
 
 # Initial Performance
-|Database |	Route	| RPS	| LATENCY	| THROUGHPUT | ERROR RATE | Note |
+|Database |	Route	| RPS	| Latency	| Throughput | Error Rate | Note |
 |-------- | ----- | --- | ------- | ---------- | ---------- | ---- | 
 |Postgres | GET | 1 | 74ms | 60 RPM | 0% | |
 |Postgres | GET | 10 | 74ms | 600 RPM | 0% | |
 |Postgres | GET | 100 | 73ms | 6,000 RPM | 0% | |
 |Postgres | GET | 1,000 | 73ms | 59,388 RPM | 0% | |
-|Postgres | GET | 10,000 | 1691MS | - | 53% | Error threshold after 10 seconds|
+|Postgres | GET | 2,000 | 144ms | 119,863 RPM | 0% | |
+|Postgres | GET | 2,500 | 577ms | 81,344 RPM | 45.7% | |
+|Postgres | GET | 10,000 | 1691MS | - | 53% | Test ended after 10 seconds (50% failures)|
 |Postgres | POST | 1 | 80ms | 60 RPM | 0% | |
 |Postgres | POST | 10 | 76 ms | 600 RPM | 0% | |
 |Postgres | POST | 100 | 74 ms | 5,926 RPM | 0% | |
 |Postgres | POST | 1,000 | 76 ms | 59,358 RPM | 0% | |
-|Postgres | GET | 10,000 | 941 MS | - | 3% | Error threshold after 3 seconds|
+|Postgres | POST | 10,000 | 941 MS | - | 83% | Test ended after 3 seconds (50% failures)|
 
+Initial performance of the GET route started to degrade at 2,000 RPS and was completely failing by 2,500 RPS.  This will be the initial target for the performance improvements.
+![Image of Initial Bottleneck](https://hackreactor-sdc-project.s3.us-west-2.amazonaws.com/deployment%20screenshots/Service%202500RPS%20-%20initial%20with%20chart?response-content-disposition=inline&X-Amz-Security-Token=IQoJb3JpZ2luX2VjEJL%2F%2F%2F%2F%2F%2F%2F%2F%2F%2FwEaCXVzLXdlc3QtMSJIMEYCIQD%2BLn1DO5dvlxr3Hf6V%2FsoM%2F3rqYgWh%2BIZTF6bK2hEvgQIhANYi9XTdnK%2Fq5iWL9tXl6HQKE9CrPOJdFtbCyS8ZZLXGKrkBCJv%2F%2F%2F%2F%2F%2F%2F%2F%2F%2FwEQARoMMDY1NTMwODI5MjYyIgyEsC7DugIChulnhvgqjQExcsEJH3odfunee1qjWxwTVFg0F6vr2PuPUYEpVAAE931urWB%2FDQtEggZDozDIlyfPG4nllxDDqziaJAgzFRpTfiIS9FdfgKsZ6monM7lbq49%2BQE0AssT%2BPtdi7A7hgj4%2FxCwCCDbMqkM6s9miB0wS5WiL7dJGPC5MXR9uUJm62mX3WN2dwpYfz%2BaoBxQw3pXe7QU6oAK9E5gzRpCEu7axykaoT2EwVIdsGlg7Ro9rKxaL%2BYJYJ5W6HCP3Lcs3ZEci5j8VlhL9Q4qN5f2gtTwzI%2FPRiQC%2BPhy6HkkfC%2BDxbilkc65S565r%2BbYm6J%2FZOJxrdr883iXWt4v9iRkuJhBb3mOabypWRcenRsvm1rGrvWaqHTtvCMRHHo95k04IL3EvwMXUpPtq77uEJX4lXcCryQDbX8knWkLVY5YK2UuL5DET9PCaFIyHw75Szv3qE4RVH%2Fee5TIP5Y8KY2T3AYM0MEkzIX%2F1%2Fxt3nCFj5R97phDjYqmQtNEdkDERDYiqIcQzLsRnr6HGxTPVd4HStgtu14WprGSJFld6FnsSTiDPIu5GdbPf%2B66Sf3cwh36mr7P3d29Mri0%3D&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20191029T013507Z&X-Amz-SignedHeaders=host&X-Amz-Expires=300&X-Amz-Credential=ASIAQ6QPRDHHFLCVLH76%2F20191029%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Signature=62bdfc96919f730be7ecc29cbc95a86d30a5f67f5e8a441ec1791601c26e2fdc)
 
 
 
