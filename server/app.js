@@ -4,6 +4,12 @@ const express = require('express');
 const app = express();
 const port = 1121;
 const queries = require('../database/queries.js')
+//redis
+const redis = require('redis');
+const client = redis.createClient();
+client.on('error', (err) => {
+  console.log("Redis Error " + err)
+});
 
 app.use(express.urlencoded());
 app.use(express.json());
@@ -28,15 +34,28 @@ app.get('/api/images', (req, res) => {
       }
     })
   } else if (database === 'postgres') {
-    // console.log('get req to postgres db')
-    queries.postgres.getOne(shoe, (shoeImage) => {
-      if (!shoeImage) {
-        res.status(500);
-        res.send('This shoe does not exist!');
-      } else {
-        // console.log('yay postgres shoes ', shoeImage)
+    //redis implemented for postgres only
+    return client.get(`shoe_images:${shoe}`, (err, results) => {
+      //if found in Redis Cache
+      if (results) {
+        //console.log(JSON.parse(results))
         res.status(200);
-        res.json([shoeImage.img1, shoeImage.img2, shoeImage.img3, shoeImage.img4, shoeImage.img5]);
+        res.json({ source: 'cache', data: JSON.parse(results) })
+      //otherwise
+      } else {
+      // console.log('get req to postgres db')
+      queries.postgres.getOne(shoe, (shoeImage) => {
+        if (!shoeImage) {
+          res.status(500);
+          res.send('This shoe does not exist!');
+        } else {
+          // console.log('yay postgres shoes ', shoeImage)
+          const resultImages = [shoeImage.img1, shoeImage.img2, shoeImage.img3, shoeImage.img4, shoeImage.img5]
+          
+          client.setex(`shoe_images:${shoe}`, 3600, JSON.stringify(resultImages))
+          res.status(200);
+          res.json({ source: 'database', data: resultImages })
+        }})
       }
     })
   } else if (database === 'couchDB') {
