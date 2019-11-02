@@ -37,7 +37,7 @@ const postgresGetOne = (shoe_id, callback) => {
   const values = [shoe_id]
   pool.query('SELECT shoe_id, img1, img2, img3, img4, img5 FROM shoe_images WHERE shoe_id = $1', values)
   .then(response => {
-    console.log(response)
+    //console.log(response)
     callback(response.rows[0]);
   })
   .catch(err => {

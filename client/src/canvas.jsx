@@ -31,7 +31,7 @@ class Canvas extends React.Component {
   }
 
   componentDidMount () {
-    $.get('http://ec2-18-237-87-30.us-west-2.compute.amazonaws.com:1121/api/images', {shoe_id: 0}, (data) => {
+    $.get('http://ec2-54-201-225-29.us-west-2.compute.amazonaws.com//api/images', {shoe_id: 0}, (data) => {
       this.setState({
         images: data.data
       })

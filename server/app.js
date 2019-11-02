@@ -22,6 +22,7 @@ app.use(express.static(__dirname + '/../client/dist'));
 
 app.get('/api/images', (req, res) => {
   let shoe = req.query.shoe_id;
+  console.log(`get req to /api/images for shoe_id ${shoe}`)
   res.setHeader('access-control-allow-origin', '*');
   if (database === 'mongoDB') {
     Shoe_Images.findOne({ shoe_id: shoe }).then((shoeImage) => {

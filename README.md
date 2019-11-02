@@ -95,12 +95,7 @@ const connectionOptions = {
 - Example command line to run the script ' k6_type=GET k6 run --vus 50 -d 600s --throw --rps 1000 k6.js'
 - increase max number of connections run 'sysctl sysctl kern.ipc.somaxconn=2048'
 
-# Redis
-- install with brew install redis (mac)
-  - brew services start redis
-- npm install --save redis
-- inside the ec2 instance followed this guide: https://medium.com/@ss.shawnshi/how-to-install-redis-on-ec2-server-for-fast-in-memory-database-f30c3ef8c35e
-- make sure to ssh into instance and redis-start
+
 
 ## Deployment Config / Setup (without Docker)
 
@@ -129,6 +124,7 @@ const connectionOptions = {
 - follow this to install node: https://docs.aws.amazon.com/sdk-for-javascript/v2/developer-guide/setting-up-node-on-ec2-instance.html
 - sudo yum install git
 - clone repo into the instance
+- install redis on the instance: https://medium.com/@ss.shawnshi/how-to-install-redis-on-ec2-server-for-fast-in-memory-database-f30c3ef8c35e
 - ssh into the instance and start the server
 - increase open file limit if necessary ulimit -n 50000
 
@@ -136,7 +132,30 @@ const connectionOptions = {
 - download the loaderio key (will be a .txt file) and save in /client/dist folder
 - verify ec2 instance and start setting up tests
 
+# Redis
+- install with brew install redis (mac)
+  - brew services start redis
+- npm install --save redis
+- inside the ec2 instance followed this guide: https://medium.com/@ss.shawnshi/how-to-install-redis-on-ec2-server-for-fast-in-memory-database-f30c3ef8c35e
+- make sure to ssh into instance and redis-start
 
+# NGINX
+- ssh into the instance
+- install using : sudo amazon-linux-extras install nginx1
+- install prebuilt centos package
+  - create file with: sudo vi /etc/yum.repos.d/nginx.repo
+  - in the newly created file file add: 
+    [nginx]
+    name=nginx repo
+    baseurl=https://nginx.org/packages/mainline/centos/7/$basearch/
+    gpgcheck=0
+    enabled=1
+- start using: sudo nginx
+- test it's running with curl -I 127.0.0.1
+
+- Configuring to work as a load balancer:
+  - cd /etc/nginx
+  - sudo vim nginx.conf
 
 ## Journal
 - 2019-09-27: Added POST, PUT, DELETE routes
@@ -159,3 +178,5 @@ const connectionOptions = {
 - 2019-10-25: Take initial speed notes.
 - 2019-10-27: Researched load balancing and Redis as a cache.
 - 2019-10-29: Implemented Redis caching.  Noticed significant improvement, able to successfully hit 2,500 RPS on service.  Noticed significant performance different with/without New Relic required on the server.  Further investgation about the issue.
+- 2019-10-31: Looked into different types of caching.  Kept using Redis default LRU cache.
+- 2019-11-02: Deployed new instance to install NGINX as a load balancer.
