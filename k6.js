@@ -12,8 +12,8 @@ export default function() {
   const testType = __ENV.k6_type || 'GET'
   const testURL = __ENV.k6_url || 'http://127.0.0.1:1121/api/images'
   if (testType === 'GET') {
-    // let shoe_id = Math.floor(Math.random() * 10000000)
-    let shoe_id = 0
+    let shoe_id = Math.floor(Math.random() * 10000000)
+    // let shoe_id = 0
     let res = http.get(`${testURL}?shoe_id=${shoe_id}`);
     if (!check(res, {
       "status code MUST be 200": (res) => {

@@ -5,9 +5,9 @@ Picture and/or Video demo of product on page
 
 
 
-## Optimizations
+### Optimizations
 
-# Initial Performance
+## Initial Performance
 |Database |	Route	| RPS	| Latency	| Throughput    | Error Rate | Note |
 |-------- | ----- | --- | ------- | ------------- | ---------- | ---- | 
 |Postgres | GET | 1 | 74ms | 60 RPM | 0% | |
@@ -27,9 +27,18 @@ We can see above that the initial performance of the GET route started to degrad
 # Initial performance chart from loader.io GET route at 2,5000 RPS
 ![Image of Initial Bottleneck](https://hackreactor-sdc-project.s3.us-west-2.amazonaws.com/deployment%20screenshots/Service%202500RPS%20-%20initial%20with%20chart?response-content-disposition=inline&X-Amz-Security-Token=IQoJb3JpZ2luX2VjEJL%2F%2F%2F%2F%2F%2F%2F%2F%2F%2FwEaCXVzLXdlc3QtMSJIMEYCIQD%2BLn1DO5dvlxr3Hf6V%2FsoM%2F3rqYgWh%2BIZTF6bK2hEvgQIhANYi9XTdnK%2Fq5iWL9tXl6HQKE9CrPOJdFtbCyS8ZZLXGKrkBCJv%2F%2F%2F%2F%2F%2F%2F%2F%2F%2FwEQARoMMDY1NTMwODI5MjYyIgyEsC7DugIChulnhvgqjQExcsEJH3odfunee1qjWxwTVFg0F6vr2PuPUYEpVAAE931urWB%2FDQtEggZDozDIlyfPG4nllxDDqziaJAgzFRpTfiIS9FdfgKsZ6monM7lbq49%2BQE0AssT%2BPtdi7A7hgj4%2FxCwCCDbMqkM6s9miB0wS5WiL7dJGPC5MXR9uUJm62mX3WN2dwpYfz%2BaoBxQw3pXe7QU6oAK9E5gzRpCEu7axykaoT2EwVIdsGlg7Ro9rKxaL%2BYJYJ5W6HCP3Lcs3ZEci5j8VlhL9Q4qN5f2gtTwzI%2FPRiQC%2BPhy6HkkfC%2BDxbilkc65S565r%2BbYm6J%2FZOJxrdr883iXWt4v9iRkuJhBb3mOabypWRcenRsvm1rGrvWaqHTtvCMRHHo95k04IL3EvwMXUpPtq77uEJX4lXcCryQDbX8knWkLVY5YK2UuL5DET9PCaFIyHw75Szv3qE4RVH%2Fee5TIP5Y8KY2T3AYM0MEkzIX%2F1%2Fxt3nCFj5R97phDjYqmQtNEdkDERDYiqIcQzLsRnr6HGxTPVd4HStgtu14WprGSJFld6FnsSTiDPIu5GdbPf%2B66Sf3cwh36mr7P3d29Mri0%3D&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20191029T013507Z&X-Amz-SignedHeaders=host&X-Amz-Expires=300&X-Amz-Credential=ASIAQ6QPRDHHFLCVLH76%2F20191029%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Signature=62bdfc96919f730be7ecc29cbc95a86d30a5f67f5e8a441ec1791601c26e2fdc)
 
+## Optimization 1 Redis Cache
 
+# 2,5000 RPS using Redis cache
+![Image of Initial Bottleneck](https://hackreactor-sdc-project.s3.us-west-2.amazonaws.com/deployment%20screenshots/Service%202500RPS%20-%20Redis%20Cache%20with%20chart?response-content-disposition=inline&X-Amz-Security-Token=IQoJb3JpZ2luX2VjEKz%2F%2F%2F%2F%2F%2F%2F%2F%2F%2FwEaCXVzLXdlc3QtMSJIMEYCIQCTp0oGV%2FvkjUHco0rGoFcrCg5kc076A6qotSIIxNSqrwIhAOc015iNH%2FccLzXLluWPJcrmGjDF8pzDxxjWL7tJev0VKrkBCLT%2F%2F%2F%2F%2F%2F%2F%2F%2F%2FwEQARoMMDY1NTMwODI5MjYyIgy%2F2Nh5rGBSb4M2Ll0qjQHPuB1%2BnHMwZ4O6lkpoktRkBwWo1Qcal%2BUqVJo8Ew4M5jvOJplaerhbqNRqJH2foe%2FjXfdCAbKrYTL4cIsJxF1OgW01FaxIvJ66yPoyux%2Bz1uEdaYBtuM6pMV6tHbJLcS%2F8BthAbnQnTur%2B2JENeKHnlLvcIu6YU%2FTTjKC4GsY9%2FMRedkJ5iL6LTNZyMGIwi9nj7QU6oAJRZbNSiFhC2p9gLleyce8kbTdbxXeD0xHK2sXa9wt2wNGd0o5yax%2Fdjt4WDTlsBVMWcBEP1EF41ARbEff%2FAc9C90k2oUDs%2FP5Cfuda7J0w6AxknYvs509Rd2xPHCJZOrh%2FfQo%2FaydHTE3fc3LiHa7RfdWPokM7ZwqHa%2Fc7m6dkAb8tQ69lJTucm7jaV3f3D83SfgMJDdolmfW%2BNAQKpO7%2BpE7J6%2FvLRgUddm2nHPGgi%2BURVWo0o9bO%2BdndIZvEDWanfEOC%2Bv%2B%2FBlsRGbRFPJlfzPnu1gEh10gvHhm9BcBfNcavF%2BhM5dbEWUsLxC8Ox27Pbr04m13lxkziilmnT9w42WqKmEuj%2FBWtx7AyfbaIE2Nd0DMko0I5JACitTJSqvo%3D&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20191030T032314Z&X-Amz-SignedHeaders=host&X-Amz-Expires=300&X-Amz-Credential=ASIAQ6QPRDHHEHN4IWPA%2F20191030%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Signature=df30fd95026b57c5b5ea58d060922c762cd008b76224c5c107d1be330a57d0c1)
 
+|Database |	Route	| RPS	| Latency	| Throughput    | Error Rate | Note |
+|-------- | ----- | --- | ------- | ------------- | ---------- | ---- | 
+|Postgres | GET | 2500 | 74ms | 149,826 RPM | 0% | |
+|Postgres | GET | 3500 | 1807ms | - RPM | 53% |Test ended after 12 seconds (too many open files)|
+|Postgres | GET | 3500 | 2293 ms | 106,541 RPM | 2% |after increasing open file limit, new bottleneck|
 
+Using Redis cache successfully broke through the initial bottle neck of ~2,500 RPS.  Attempting 3,500 RPS initially ran into an open file limit issue.  After addressing the open file limit with ulimit -n XX,XXX I was able to successfully run the test at 3,500 RPS.  The failure rate
 
 ## Config/Setup Notes
 
@@ -90,7 +99,8 @@ const connectionOptions = {
 - install with brew install redis (mac)
   - brew services start redis
 - npm install --save redis
-- inside the ec2 instance
+- inside the ec2 instance followed this guide: https://medium.com/@ss.shawnshi/how-to-install-redis-on-ec2-server-for-fast-in-memory-database-f30c3ef8c35e
+- make sure to ssh into instance and redis-start
 
 ## Deployment Config / Setup (without Docker)
 
@@ -118,7 +128,9 @@ const connectionOptions = {
 # Deploying Service Instance
 - follow this to install node: https://docs.aws.amazon.com/sdk-for-javascript/v2/developer-guide/setting-up-node-on-ec2-instance.html
 - sudo yum install git
+- clone repo into the instance
 - ssh into the instance and start the server
+- increase open file limit if necessary ulimit -n 50000
 
 # Loaderio
 - download the loaderio key (will be a .txt file) and save in /client/dist folder
@@ -145,3 +157,5 @@ const connectionOptions = {
 - 2019-10-21: Deployed postgres to AWS.
 - 2019-10-23: Connected service to deployed database.  Deployed service to AWS.
 - 2019-10-25: Take initial speed notes.
+- 2019-10-27: Researched load balancing and Redis as a cache.
+- 2019-10-29: Implemented Redis caching.  Noticed significant improvement, able to successfully hit 2,500 RPS on service.  Noticed significant performance different with/without New Relic required on the server.  Further investgation about the issue.

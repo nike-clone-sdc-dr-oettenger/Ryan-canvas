@@ -51,7 +51,7 @@ app.get('/api/images', (req, res) => {
         } else {
           // console.log('yay postgres shoes ', shoeImage)
           const resultImages = [shoeImage.img1, shoeImage.img2, shoeImage.img3, shoeImage.img4, shoeImage.img5]
-          
+
           client.setex(`shoe_images:${shoe}`, 3600, JSON.stringify(resultImages))
           res.status(200);
           res.json({ source: 'database', data: resultImages })
