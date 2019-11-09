@@ -7,10 +7,10 @@ from locust import HttpLocust, TaskSet
 #     l.client.post("/logout", {"username":"ellen_key", "password":"education"})
 
 def index(l):
-    l.client.post("/api/images", {"shoe_id": 999, "img1": "fakeurl.com"})
+    l.client.post("api/images", {"shoe_id": 999, "img1": "fakeurl.com"})
 
 def GetImages(l):
-    l.client.get("/api/images")
+    l.client.get("api/images?shoe_id=0")
 
 class UserBehavior(TaskSet):
     tasks = {GetImages: 1}

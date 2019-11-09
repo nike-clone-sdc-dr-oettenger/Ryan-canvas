@@ -1,4 +1,4 @@
-require('newrelic');
+//require('newrelic');
 const express = require('express');
 // const { Shoe_Images } = require('../database/schemas.js');
 const app = express();
@@ -10,6 +10,9 @@ const client = redis.createClient();
 client.on('error', (err) => {
   console.log("Redis Error " + err)
 });
+
+const cluster = require('cluster')
+
 
 app.use(express.urlencoded());
 app.use(express.json());
@@ -69,8 +72,6 @@ app.get('/api/images', (req, res) => {
     res.status(500);
     res.send('no database chosen on backend');
   }
-
-
 })
 
 app.get('/api/recommendedImage', (req, res) => {

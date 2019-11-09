@@ -7,6 +7,6 @@ module.exports = {
     password: 'password',
     database: 'nike_canvas',
     pgport: 5432,
-    max: 50
+    max: 100
   }
 }

@@ -120,7 +120,11 @@ const connectionOptions = {
 - CREATE DATABASE nike_canvas;
 - CREATE TABLE Shoe_Images (ID SERIAL PRIMARY KEY, shoe_id int, img1 VARCHAR(255), img2 VARCHAR(255), img3 VARCHAR(255), img4 VARCHAR(255), img5 VARCHAR(255), img6 VARCHAR(255), img7 VARCHAR(255), vid1 VARCHAR(255), vid2 VARCHAR(255));
 
+- changed max_connections as part of load balance optimization.  Edited config file with this command:
+  - sudo vim /var/lib/pgsql/data/postgresql.conf
+
 # Deploying Service Instance
+# final start script: redis-server --daemonize yes; cd Ryan-canvas; npm run server:start
 - follow this to install node: https://docs.aws.amazon.com/sdk-for-javascript/v2/developer-guide/setting-up-node-on-ec2-instance.html
 - sudo yum install git
 - clone repo into the instance
@@ -136,8 +140,9 @@ const connectionOptions = {
 - install with brew install redis (mac)
   - brew services start redis
 - npm install --save redis
-- inside the ec2 instance followed this guide: https://medium.com/@ss.shawnshi/how-to-install-redis-on-ec2-server-for-fast-in-memory-database-f30c3ef8c35e
+- inside deployed ec2 instance follow this guide: https://medium.com/@ss.shawnshi/how-to-install-redis-on-ec2-server-for-fast-in-memory-database-f30c3ef8c35e
 - make sure to ssh into instance and redis-start
+  - run in background with redis-server --daemonize yes
 
 # NGINX
 - ssh into the instance
@@ -180,3 +185,5 @@ const connectionOptions = {
 - 2019-10-29: Implemented Redis caching.  Noticed significant improvement, able to successfully hit 2,500 RPS on service.  Noticed significant performance different with/without New Relic required on the server.  Further investgation about the issue.
 - 2019-10-31: Looked into different types of caching.  Kept using Redis default LRU cache.
 - 2019-11-02: Deployed new instance to install NGINX as a load balancer.
+- 2019-11-05: Worked with NGINX settings and file limits.
+- 2019-11-07: Continued to work on configuring nginx to handle > 3,500 connections.  Increased postgres max_connections to 500.

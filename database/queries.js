@@ -28,7 +28,7 @@ const postgresPost = (x, callback) => {
   const querystring = 'INSERT INTO shoe_images (shoe_id, img1, img2, img3, img4, img5, img6, img7, vid1, vid2) values($1, $2, $3, $4, $5, $6, $7, $8, $9, $10);'
   pool.query(querystring, values).then(res => callback(res))
   .catch(err => {
-    client.release();
+    // pool.release();
     callback(err);
   })
 }
