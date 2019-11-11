@@ -11,9 +11,12 @@ client.on('error', (err) => {
   console.log("Redis Error " + err)
 });
 
+//uncomment cluster section to run cluster mode on multi-core CPU
+// additional } at the end to also uncomment
+/*
 const cluster = require('cluster')
 if(cluster.isMaster) {
-  var numWorkers = 3;
+  var numWorkers = 4;
   console.log('Master cluster setting up ' + numWorkers + ' workers...');
 
   for(var i = 0; i < numWorkers; i++) {
@@ -30,6 +33,7 @@ if(cluster.isMaster) {
       cluster.fork();
   });
 }  else {
+*/ 
   app.use(express.urlencoded());
   app.use(express.json());
 
@@ -202,11 +206,12 @@ if(cluster.isMaster) {
   app.listen(port, () => {
     console.log(`Image server is running on http://localhost:${port}/`);
   })
-
+/*
   cluster.on('exit', (worker) => {
     console.log('worker ', worker.id, 'is dead, restarting');
     cluster.fork();
   })
-}
+  */
+//}
 
 

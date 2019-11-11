@@ -131,6 +131,10 @@ const connectionOptions = {
 - install redis on the instance: https://medium.com/@ss.shawnshi/how-to-install-redis-on-ec2-server-for-fast-in-memory-database-f30c3ef8c35e
 - ssh into the instance and start the server
 - increase open file limit if necessary ulimit -n 50000
+- increased several network/connection limits
+  - sudo sysctl -w net.ipv4.ip_local_port_range="1024 65535"
+  - sudo sysctl net.core.somaxconn=10000
+  - sudo sysctl net.ipv4.tcp_max_syn_backlog=10000
 
 # Loaderio
 - download the loaderio key (will be a .txt file) and save in /client/dist folder
@@ -187,3 +191,5 @@ const connectionOptions = {
 - 2019-11-02: Deployed new instance to install NGINX as a load balancer.
 - 2019-11-05: Worked with NGINX settings and file limits.
 - 2019-11-07: Continued to work on configuring nginx to handle > 3,500 connections.  Increased postgres max_connections to 500.
+- 2019-11-09: increased ip port range and connection limits on nginx instance machine.
+- 2019-11-11: Attempted to scale vertically, by increasing ec2 instance size/power while also using node cluster mode with 1 worker per core.  3,500 RPS achieved on medium instance in cluster mode with 2 workers.  10,000 RPS achieved using an xL instance with 4 workers.
