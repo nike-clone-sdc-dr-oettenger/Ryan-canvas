@@ -1,13 +1,11 @@
 ## canvas
 Picture and/or Video demo of product on page
+Descriptio of project specifications / goals
 
 
 
 
-
-
-
-## Initial Performance
+## Initial Performance - Service
 |Database |	Route	| RPS	| Latency	| Throughput    | Error Rate | Note |
 |-------- | ----- | --- | ------- | ------------- | ---------- | ---- | 
 |Postgres | GET | 1 | 74ms | 60 RPM | 0% | |
@@ -25,16 +23,14 @@ Picture and/or Video demo of product on page
 
 We can see above that the initial performance of the GET route started to degrade at 2,000 RPS and was completely failing by 2,500 RPS.  This will be the initial target for performance improvements.
 
-I was surprised that the post request was able to handle all of the requests, so I did a quick check of the database
-![Post Request Verification](https://hackreactor-sdc-project.s3-us-west-2.amazonaws.com/deployment+screenshots/Verification+of+POST+requests+hitting+DB)
 
-# Initial performance chart from loader.io GET route at 2,5000 RPS
+# Initial Bottleneck - Performance chart from loader.io GET route at 2,5000 RPS
 ![Image of Initial Bottleneck](https://hackreactor-sdc-project.s3-us-west-2.amazonaws.com/deployment+screenshots/Service+2500RPS+-+initial+with+chart)
 
 ## Optimization Redis Cache
 Using Redis cache successfully broke through the initial bottle neck of ~2,500 RPS.  Attempting 3,500 RPS initially ran into an open file limit issue.  After addressing the open file limit I was able to successfully run the test at 3,500 RPS.  The failure rate was execessive around 3,500 RPS.
 
-# 2,5000 RPS using Redis cache
+# 2,500 RPS using Redis cache
 ![Image of Redis 2500](https://hackreactor-sdc-project.s3-us-west-2.amazonaws.com/deployment+screenshots/Service+2500RPS+-+Redis+Cache+with+chart)
 
 |Database |	Route	| RPS	| Latency	| Throughput    | Error Rate | Note |
@@ -43,7 +39,7 @@ Using Redis cache successfully broke through the initial bottle neck of ~2,500 R
 |Postgres | GET | 3500 | 1807ms | - RPM | 53% |Test ended after 12 seconds (too many open files)|
 |Postgres | GET | 3500 | 2293 ms | 106,541 RPM | 2% |after increasing open file limit, new bottleneck|
 
-# 3,500 RPS using Redis
+# Single Instance Bottleneck - 3,500 RPS using Redis
 ![Image of Redis 3500 Fail](https://hackreactor-sdc-project.s3-us-west-2.amazonaws.com/deployment+screenshots/Service+3500RPS+-+Redis+Cache+with+chart+-+new+bottleneck)
 
 ## Nginx Load Balancing
@@ -68,16 +64,19 @@ After successfully load blalancing using the AWS elastic load balancer, I was fu
 
 I did more research and realized I had some of my settings in the incorrect location of the configuration file.  I tuned many of the following configuration file settings. The important settings were related to:
   - Upstream connection limits
-  - Upstream connection strategy (least_conn)
+  - Upstream connection strategy
   - Keepalive request limits and timeouts
-  - Handling "failed" upstream servers (timeout, max_fails)
-  - Worker connections
+  - Handling "failed" upstream servers
+  - Worker connection limits / settings
   - Worker file limits
+  - Proxy buffers
+  - Nginx cache
+
 # Micro Nginx instance 6,000 RPS - 8x upstream microservices
 ![Nginx Micro 6k RPS Stable](https://hackreactor-sdc-project.s3-us-west-2.amazonaws.com/deployment+screenshots/Service+-+6000+RPS+load+balanced+-+stable)
 
-# Final Configuration - Load Balanced + Some Vertical Scaling
-I tweaked the configuration file for a few days trying to improve performance.  The best results I had were a few "successful" runs at 7,000 RPS.  However, these runs appeared to be inconsistencies/luck based, because upon repeated attempts they would surpass the error threshold of 1%.  
+# Final Configuration - t3.medium Load Balancer + 8x t3.micro Service Instances
+I tweaked the configuration file for a few days trying to improve performance.  The best results I had were a few "successful" runs at 7,000 RPS.  However, these runs appeared to be inconsistencies/luck based, because upon repeated attempts they would surpass the error threshold of 1% so the screenshots aren't included.
 
 I ended up scaling the Nginx load balanced instance to a t3.medium instance so that I would have an additional Nginx worker to help manage the connections.  Using the 1 t3.medium load balanced instance and 8 t2.micro instances running my microservice with their own Redis cache I was able to hit the goal of 10,000 RPS.
 ![Final Run](https://hackreactor-sdc-project.s3-us-west-2.amazonaws.com/deployment+screenshots/Final+Run+-+10%2C000+RPS+t2.medium+load+balancer+8x+micro+instances)
@@ -90,6 +89,16 @@ Vertically scalling the service (with Redis cache) was also tested.  The server 
 # t3.xL instance - Node.js cluster mode with 4 workers
 ![Image of t3.xL instance cluster](https://hackreactor-sdc-project.s3-us-west-2.amazonaws.com/deployment+screenshots/Pay2Win+10k+RPS+-+xL+instance+in+4x+cluster+mode)
 
+# Cost Analysis
+
+|Instance Size |	On Demand Cost/Hr	|
+|-------- | ----- | |
+|t2.micro | $0.0116 per Hour | 
+|t3.medium | $0.0416 per Hour | 
+|t3.xL | $0.1664 per Hour | 
+
+My final configuration would cost $0.1344 per hour compared to the t3.xL price of $0.1664, about 20% cheaper than the single xL instance.  I kept many of my instances running for the duration of the project, and did various tests on different size instances throughout the project.  Here's what it cost me...
+![Image of my cost](https://hackreactor-sdc-project.s3-us-west-2.amazonaws.com/Screen+Shot+2019-11-16+at+9.06.21+AM.png)
 
 ### The following sections are personal notes I kept around how I installed certain programs and my daily progress journal.
 
@@ -252,6 +261,8 @@ sudo sysctl net.core.somaxconn=10000;sudo sysctl net.ipv4.tcp_max_syn_backlog=10
 - 2019-10-21: Deployed service to AWS.
 - 2019-10-23: Connected service to deployed database.  
 - 2019-10-25: Take initial speed notes.
+  - Verification of POST requests hitting DB
+  ![Post Request Verification](https://hackreactor-sdc-project.s3-us-west-2.amazonaws.com/deployment+screenshots/Verification+of+POST+requests+hitting+DB)
 - 2019-10-27: Researched load balancing and Redis as a cache.
 - 2019-10-29: Implemented Redis caching.  Noticed significant improvement, able to successfully hit 2,500 RPS on service.  Noticed significant performance different with/without New Relic required on the server.  Further investgation about the issue.
 - 2019-10-31: Looked into different types of caching.  Kept using Redis default LRU cache.
