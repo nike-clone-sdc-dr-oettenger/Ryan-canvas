@@ -5,7 +5,6 @@ import Table from './modules/table.jsx';
 import FullSize from './modules/imageList.jsx';
 import Modal from 'react-modal';
 
-
 Modal.setAppElement('#canvas');
 
 const customStyle = {
@@ -25,15 +24,14 @@ class Canvas extends React.Component {
       images: [],
       modalIsOpen: false
     };
-
     this.openModal = this.openModal.bind(this);
     this.closeModal = this.closeModal.bind(this);
   }
 
   componentDidMount () {
-    $.get('http://18.207.197.100:1121/api/images', {shoe_id: 0}, (data) => {
+    $.get('http://ec2-54-201-225-29.us-west-2.compute.amazonaws.com/api/images', {shoe_id: 0}, (data) => {
       this.setState({
-        images: data
+        images: data.data
       })
     })
   }
