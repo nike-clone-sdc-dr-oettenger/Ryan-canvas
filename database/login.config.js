@@ -1,5 +1,3 @@
-
-
 module.exports = {
   psql: {
     host: 'ec2-18-236-181-36.us-west-2.compute.amazonaws.com',

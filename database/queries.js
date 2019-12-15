@@ -2,7 +2,6 @@
 const psqlconfig = require('./login.config.js').psql;
 const Pool = require('pg').Pool;
 
-
 const connectionOptions = {
   user: psqlconfig.user,
   password: psqlconfig.password,
@@ -22,13 +21,11 @@ const nano = require('nano');
 const couch = nano('http://127.0.0.1:5984');
 const shoe_images = couch.db.use('nike_canvas');
 
-
 const postgresPost = (x, callback) => {
   const values = [x.shoe_id, x.img1, x.img2, x.img3, x.img4, x.img5, x.img6, x.img7, x.vid1, x.vid2]
   const querystring = 'INSERT INTO shoe_images (shoe_id, img1, img2, img3, img4, img5, img6, img7, vid1, vid2) values($1, $2, $3, $4, $5, $6, $7, $8, $9, $10);'
   pool.query(querystring, values).then(res => callback(res))
   .catch(err => {
-    // pool.release();
     callback(err);
   })
 }
@@ -37,7 +34,6 @@ const postgresGetOne = (shoe_id, callback) => {
   const values = [shoe_id]
   pool.query('SELECT shoe_id, img1, img2, img3, img4, img5 FROM shoe_images WHERE shoe_id = $1', values)
   .then(response => {
-    //console.log(response)
     callback(response.rows[0]);
   })
   .catch(err => {
@@ -88,7 +84,6 @@ const couchDbPost = (x, callback) => {
     callback(err)
   })
 }
-
 
 module.exports = {
   postgres: {

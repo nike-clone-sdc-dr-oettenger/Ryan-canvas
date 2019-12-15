@@ -6,8 +6,6 @@ export let options = {
   throw: true,
 }
 
-
-
 export default function() {
   const testType = __ENV.k6_type || 'GET'
   const testURL = __ENV.k6_url || 'http://127.0.0.1:1121/api/images'

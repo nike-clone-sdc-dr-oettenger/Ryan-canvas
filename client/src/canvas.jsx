@@ -5,7 +5,6 @@ import Table from './modules/table.jsx';
 import FullSize from './modules/imageList.jsx';
 import Modal from 'react-modal';
 
-
 Modal.setAppElement('#canvas');
 
 const customStyle = {
@@ -25,7 +24,6 @@ class Canvas extends React.Component {
       images: [],
       modalIsOpen: false
     };
-
     this.openModal = this.openModal.bind(this);
     this.closeModal = this.closeModal.bind(this);
   }

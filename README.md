@@ -1,9 +1,7 @@
 ## canvas
-Picture and/or Video demo of product on page
-Descriptio of project specifications / goals
+Inherited microservice that handles an image carousel for a Nike clone product page.  The goal of the project was to scale the deployed microservice on AWS EC2 t2.micro instances to be able to handle 10,000 requests per second (RPS) with minimal errors.
 
-
-
+Prior to deployment, additional CRUD endpoints were added to the server, and two additional databases (PostgreSQL and CouchDB) were seeded with 10 million records and tested locally.  PostgreSQL was the chosen database for the final deployed application.
 
 ## Initial Performance - Service
 |Database |	Route	| RPS	| Latency	| Throughput    | Error Rate | Note |
@@ -190,8 +188,10 @@ const connectionOptions = {
 - changed max_connections as part of load balance optimization.  Edited config file with this command:
   - sudo vim /var/lib/pgsql/data/postgresql.conf
 
+
+# Microservice start script: sudo sysctl -w net.ipv4.ip_local_port_range="1024 65535"; sudo sysctl net.core.somaxconn=100000;sudo sysctl net.ipv4.tcp_max_syn_backlog=100000;sudo sysctl -p;redis-server --daemonize yes; cd Ryan-canvas; npm run server:start
+
 # Deploying Service Instance
-# final start script: sudo sysctl -w net.ipv4.ip_local_port_range="1024 65535"; sudo sysctl net.core.somaxconn=100000;sudo sysctl net.ipv4.tcp_max_syn_backlog=100000;sudo sysctl -p;redis-server --daemonize yes; cd Ryan-canvas; npm run server:start
 - follow this to install node: https://docs.aws.amazon.com/sdk-for-javascript/v2/developer-guide/setting-up-node-on-ec2-instance.html
 - sudo yum install git
 - clone repo into the instance
@@ -272,4 +272,5 @@ sudo sysctl net.core.somaxconn=10000;sudo sysctl net.ipv4.tcp_max_syn_backlog=10
 - 2019-11-09: increased ip port range and connection limits on nginx instance machine.
 - 2019-11-11: Attempted to scale vertically, by increasing ec2 instance size/power while also using node cluster mode with 1 worker per core.  3,500 RPS achieved on medium instance in cluster mode with 2 workers.  10,000 RPS achieved using an xL instance with 4 workers.
 - 2019-11-13: Tweaked a number of NGINX settings Achieved 6,000 RPS with micro load nginx instance and between 4-10 micro services.  Attempted to scale to 7,000 with unstable results.
-- 2019-11-15: 
+- 2019-11-15: Achieved final result of 10,000 RPS using a t3.medium load balancer with 8x t2.micro services.
+- 2019-11-16: Worked on readme updates.

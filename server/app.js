@@ -13,6 +13,7 @@ client.on('error', (err) => {
 
 //uncomment cluster section to run cluster mode on multi-core CPU
 // additional } at the end to also uncomment
+
 /*
 const cluster = require('cluster')
 if(cluster.isMaster) {
@@ -45,7 +46,6 @@ if(cluster.isMaster) {
   // app.use('/:id', express.static('client/dist'))
   app.use(express.static(__dirname + '/../client/dist'));
   
-
   app.get('/api/images', (req, res) => {
     let shoe = req.query.shoe_id;
     console.log(`get req to /api/images for shoe_id ${shoe}`)
@@ -65,20 +65,16 @@ if(cluster.isMaster) {
       return client.get(`shoe_images:${shoe}`, (err, results) => {
         //if found in Redis Cache
         if (results) {
-          //console.log(JSON.parse(results))
           res.status(200);
           res.json({ source: 'cache', data: JSON.parse(results) })
-          //otherwise
         } else {
-          // console.log('get req to postgres db')
+          console.log('get req to postgres db')
           queries.postgres.getOne(shoe, (shoeImage) => {
             if (!shoeImage) {
               res.status(500);
               res.send('This shoe does not exist!');
             } else {
-              // console.log('yay postgres shoes ', shoeImage)
               const resultImages = [shoeImage.img1, shoeImage.img2, shoeImage.img3, shoeImage.img4, shoeImage.img5]
-
               client.setex(`shoe_images:${shoe}`, 3600, JSON.stringify(resultImages))
               res.status(200);
               res.json({ source: 'database', data: resultImages })
@@ -88,7 +84,6 @@ if(cluster.isMaster) {
       })
     } else if (database === 'couchDB') {
       queries.couchDB.getOne(shoe, (shoeImage) => {
-        // console.log('yay couchDB shoes', shoeImage)
         res.status(200);
         res.json([shoeImage.img1, shoeImage.img2, shoeImage.img3, shoeImage.img4, shoeImage.img5]);
       })
@@ -143,7 +138,6 @@ if(cluster.isMaster) {
         }
       })
     } else if (database === 'postgres') {
-      //example postgres query
       queries.postgres.post({ shoe_id: req.body.shoe_id }, (data) => {
         // console.log('*****************\n SUCCESS?', data.command, data.rowCount)
         res.status(201);
